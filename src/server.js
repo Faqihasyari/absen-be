@@ -15,6 +15,11 @@ const PORT = process.env.PORT || 3000;
 
         await sequelize.sync({alter: true});
         console.log("Table synced");
+
+        require("./models");
+
+        await sequelize.sync({alter: true});
+        console.log("Table & relasi berhasil di sync");
         process.exit(0);
         // app.listen(PORT, () => {
         //     console.log(`Server berjalan di port ${PORT}`);
