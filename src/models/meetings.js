@@ -18,4 +18,6 @@ const Meetings = sequelize.define(
             allowNull: false
         }
     }
-)
+);
+
+module.exports = Meetings;
