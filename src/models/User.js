@@ -26,11 +26,19 @@ const User = sequelize.define(
         },
         qr_token: {
             type: DataTypes.STRING,
-            unique: true
         }
     },
     {
-        timestamps: true
+        timestamps: true,
+        indexes: [{
+            unique: true,
+            fields: ["nim"]
+        },
+        {
+            unique: true,
+            fields: ["qr_token"]
+        }
+        ]
     }
 );
 
