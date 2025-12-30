@@ -2,10 +2,6 @@ require("dotenv").config();
 const sequelize = require("./config/database");
 const app = require("./app");
 
-// import mode user
-require("./models/User")
-require("./models/meetings")
-
 const PORT = process.env.PORT || 3000;
 
 (async () => {
