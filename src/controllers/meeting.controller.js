@@ -1,22 +1,30 @@
 const { Meetings, User, Attendance } = require("../models");
 
 exports.createrMeetings = async (req, res) => {
-    try {
-        const {nama_rapat, tanggal} = req.body;
+  try {
+    const { nama_rapat, tanggal, creatorId } = req.body;
 
-        const meeting = await Meetings.create({
-            nama_rapat,
-            tanggal,
-        });
-
-        res.status(201).json({
-            message: "Rapat berhasil dibuat",
-            data: meeting,
-        })
-    } catch (error) {
-        res.status(500),json({error: error.message});
+    if (!nama_rapat || !creatorId) {
+      return res.status(400).json({
+        message: "nama_rapat dan creatorId wajib diisi"
+      });
     }
-}
+
+    const meeting = await Meetings.create({
+      nama_rapat,
+      tanggal,
+      creatorId
+    });
+
+    res.status(201).json({
+      message: "Rapat berhasil dibuat",
+      data: meeting,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 exports.getMeetings = async (req, res) => {
     try {
