@@ -10,6 +10,7 @@ app.use(express.json());
 app.use("/api", require("./routes"));
 
 
+
 app.get("/", (req, res) => {
   res.send("API Absensi HIMASANTIKA 🚀");
 });

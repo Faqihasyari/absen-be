@@ -47,7 +47,7 @@ exports.scanAttendance = async (req, res) => {
         // menyimpan absensi
         const attendance = await Attendance.create({
             user_id: user.id,
-            meeting_id: meeting,
+            meeting_id: meeting.id,
              status: status || "alfa"
         });
 

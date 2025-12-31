@@ -14,4 +14,5 @@ router.get("/:id", meetingsController.getMeetingsDetail);
 // edit rapat
 router.patch("/:id/status", meetingsController.updateStatus);
 
+
 module.exports = router;
