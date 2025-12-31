@@ -16,6 +16,10 @@ const Meetings = sequelize.define(
         tanggal: {
             type: DataTypes.DATE,
             allowNull: false
+        },
+        status: {
+            type: DataTypes.ENUM("Sedang berlangsung", "Selesai"),
+            defaultValue: "Sedang berlangsung"
         }
     }
 );
