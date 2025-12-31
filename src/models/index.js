@@ -28,7 +28,11 @@ Meetings.hasMany(Permissions, {
 });
 Permissions.belongsTo(Meetings, {foreignKey : "meeting_id"});
 
-
+User.hasMany(Meetings, {foreignKey: "creatorId"});
+Meetings.belongsTo(User, {
+    foreignKey: "creatorId",
+    as: "creator"
+})
 
 module.exports = {
     User,

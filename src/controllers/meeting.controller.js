@@ -1,4 +1,4 @@
-const { Meetings, User } = require("../models");
+const { Meetings, User, Attendance } = require("../models");
 
 exports.createrMeetings = async (req, res) => {
     try {
@@ -18,11 +18,11 @@ exports.createrMeetings = async (req, res) => {
     }
 }
 
-exports.getMeeetings = async (req, res) => {
+exports.getMeetings = async (req, res) => {
     try {
         const meetings = await Meetings.findAll({
             order:[["date", "DESC"]],
-            attributes: ['nama_rapat', 'tanggal'],
+            attributes: ['nama_rapat', 'tanggal', "status"],
             include: [
                 {
                     model: User,
@@ -40,3 +40,41 @@ exports.getMeeetings = async (req, res) => {
         res.status(500).json({error: error.message});
     }
 };
+
+exports.getMeetingsDetail = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // declare meeting untuk mendapatkan datanya
+        const meeting = await Meetings.findByPk(id, {
+            attributes: ["id", "title", "date", "status"],
+            include: [
+                {
+                    model: Attendance,
+                    attributes: ["id", "status" ],
+                    include: [
+                        {
+                            model: User,
+                            attributes: ["id", "nama", "nim", "jabatan"]
+                        }
+                    ]
+                }
+            ]
+        });
+
+        // Jika meeting false maka kirim pesan ini
+        if (!meeting) {
+            return res.status(404).json({
+                message: "Rapat tidak ditemukan"
+            });
+        }
+
+        // jika berhasil maka tampillkan data meeting
+        res.status(200).json({
+            message: "detail rapat berhasil diambil",
+            data: meeting
+        });
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+}
