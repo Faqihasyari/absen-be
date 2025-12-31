@@ -1,0 +1,1 @@
+const {User, Meetings, Attendace} = require("../models");

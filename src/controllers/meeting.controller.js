@@ -29,8 +29,8 @@ exports.createrMeetings = async (req, res) => {
 exports.getMeetings = async (req, res) => {
     try {
         const meetings = await Meetings.findAll({
-            order:[["date", "DESC"]],
-            attributes: ['nama_rapat', 'tanggal', "status"],
+            order:[["tanggal", "DESC"]],
+            attributes: ['id', 'nama_rapat', 'tanggal', "status"],
             include: [
                 {
                     model: User,
@@ -55,7 +55,7 @@ exports.getMeetingsDetail = async (req, res) => {
 
         // declare meeting untuk mendapatkan datanya
         const meeting = await Meetings.findByPk(id, {
-            attributes: ["id", "title", "date", "status"],
+            attributes: ["id", "nama_rapat", "tanggal", "status"],
             include: [
                 {
                     model: Attendance,
@@ -85,4 +85,35 @@ exports.getMeetingsDetail = async (req, res) => {
     } catch (error) {
         res.status(500).json({error: error.message});
     }
-}
+};
+
+// update status rapat
+exports.updateStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!["Sedang berlangsung", "Selesai"].includes(status)) {
+            return res,status(400).json({
+                message: "Status tidak valid"
+            });
+        }
+
+        const meeting = await Meetings.findByPk(id);
+        if (!meeting) {
+            return res.status(404).json({
+                message: "Rapat tidak ditemukan"
+            });
+        }
+
+        meeting.status = status;
+        await meeting.save();
+
+        res.json({
+            message: "Status rapat berhasil diubah",
+            data: meeting
+        });
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+};
