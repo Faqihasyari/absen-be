@@ -17,6 +17,14 @@ exports.createUser = async (req, res) => {
             qr_token
         });
 
+        // validasi
+        if (!nama || !nim) {
+            return res.status(400).json({
+                message: "Nama dan NIM wajib diisi"
+            });
+        }
+
+
         res.status(201).json({
             message: "Anggota Himasantika berhasil ditambahkan",
             data: user,

@@ -94,7 +94,7 @@ exports.updateStatus = async (req, res) => {
         const { status } = req.body;
 
         if (!["Sedang berlangsung", "Selesai"].includes(status)) {
-            return res,status(400).json({
+            return res.status(400).json({
                 message: "Status tidak valid"
             });
         }
@@ -103,6 +103,13 @@ exports.updateStatus = async (req, res) => {
         if (!meeting) {
             return res.status(404).json({
                 message: "Rapat tidak ditemukan"
+            });
+        }
+
+        // tidak bisa diubah saat sudah di selesaikan
+        if (meeting.status === "Selesai") {
+            return res.status(400).json({
+                message: "Rapat sudah selesai dan tidak bisa diubah"
             });
         }
 

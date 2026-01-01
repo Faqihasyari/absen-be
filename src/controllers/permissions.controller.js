@@ -50,7 +50,8 @@ exports.createPermission = async (req, res) => {
             });
 
             res.json({
-                message: "Daftar izin berhasil diambil"
+                message: "Daftar izin berhasil diambil",
+                data: permissions
             });
 
         } catch (error) {

@@ -39,16 +39,38 @@ exports.scanAttendance = async (req, res) => {
         });
 
         if (existingAttendance){
-            return res.status(400),json({
+            return res.status(400).json({
                 message: "User sudah melakukan absensi"
             });
         }
+
+        // orang yang sudah izin tidak bisa scam absensi
+        const permission = await Permissions.findOne({
+            where: {
+                user_id: user.id,
+                meeting_id: meeting.id
+            }
+        });
+
+        if (permission) {
+            return res.status(400).json({
+                message: "Tidak bisa absensi karena sudah mengajukan izin"
+            });
+        }
+
+        // validate kalo qr token dan meeting id kosong
+        if (!qr_token || !meeting_id) {
+            return res.status(400).json({
+                message: "qr_token dan meeting_id wajib diisi"
+            });
+        }
+
 
         // menyimpan absensi
         const attendance = await Attendance.create({
             user_id: user.id,
             meeting_id: meeting.id,
-             status: status || "alfa"
+             status: status || "hadir"
         });
 
         res.status(201).json({
