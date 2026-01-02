@@ -16,6 +16,17 @@ exports.createPermission = async (req, res) => {
         return res.status(404).json({message: "Rapat tidak ditemukan"});
     }
 
+    const existing = await Permissions.findOne({
+    where: { user_id, meeting_id }
+    });
+
+    if (existing) {
+    return res.status(400).json({
+        message: "Izin sudah pernah diajukan"
+    });
+    }
+
+
     const permission = await Permissions.create({
         user_id,
         meeting_id,

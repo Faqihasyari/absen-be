@@ -1,8 +1,17 @@
-const {User, Meetings, Attendace, Attendance} = require("../models");
+const {User, Meetings, Permissions, Attendance} = require("../models");
 
 exports.scanAttendance = async (req, res) => {
     try {
-        const {qr_token, meeting_id, status} = req.body;
+        const {qr_token, meeting_id} = req.body;
+
+        let status = "hadir";
+
+        // validate kalo qr token dan meeting id kosong
+        if (!qr_token || !meeting_id) {
+            return res.status(400).json({
+                message: "qr_token dan meeting_id wajib diisi"
+            });
+        }
 
         // mencari user berdasarkan qr token
         const user = await User.findOne({
@@ -46,23 +55,17 @@ exports.scanAttendance = async (req, res) => {
 
         // orang yang sudah izin tidak bisa scam absensi
         const permission = await Permissions.findOne({
-            where: {
-                user_id: user.id,
-                meeting_id: meeting.id
-            }
+        where: {
+            user_id: user.id,
+            meeting_id,
+            status: "disetujui"
+        }
         });
 
         if (permission) {
-            return res.status(400).json({
-                message: "Tidak bisa absensi karena sudah mengajukan izin"
-            });
-        }
-
-        // validate kalo qr token dan meeting id kosong
-        if (!qr_token || !meeting_id) {
-            return res.status(400).json({
-                message: "qr_token dan meeting_id wajib diisi"
-            });
+        return res.status(400).json({
+            message: "Anda sudah izin, tidak perlu scan absensi"
+        });
         }
 
 
@@ -70,7 +73,7 @@ exports.scanAttendance = async (req, res) => {
         const attendance = await Attendance.create({
             user_id: user.id,
             meeting_id: meeting.id,
-             status: status || "hadir"
+             status: status 
         });
 
         res.status(201).json({
