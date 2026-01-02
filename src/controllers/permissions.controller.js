@@ -39,11 +39,13 @@ exports.createPermission = async (req, res) => {
             const permissions = await Permissions.findAll({
                 include: [
                     {
-                        model: User, 
+                        model: User,
+                        as: "user",
                         attributes: ["id", "nama", "nim"]
                     },
                     {
                         model: Meetings,
+                        as: "meeting",
                         attributes: ["id", "nama_rapat", "tanggal"]
                     }
                 ]

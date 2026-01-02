@@ -26,13 +26,22 @@ Meetings.hasMany(Permissions, {
     foreignKey: "meeting_id",
     onDelete: "CASCADE"
 });
-Permissions.belongsTo(Meetings, {foreignKey : "meeting_id"});
+Permissions.belongsTo(Meetings, {foreignKey : "meeting_id", as: "meeting"});
 
 User.hasMany(Meetings, {foreignKey: "creatorId"});
 Meetings.belongsTo(User, {
     foreignKey: "creatorId",
     as: "creator"
 })
+
+User.hasMany(Permissions, {
+    foreignKey: "user_id",
+    onDelete: "CASCADE"
+});
+Permissions.belongsTo(User, {
+    foreignKey: "user_id",
+    as: "user"
+});
 
 module.exports = {
     User,
