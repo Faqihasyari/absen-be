@@ -2,13 +2,15 @@ const { Meetings, User, Attendance } = require("../models");
 
 exports.createrMeetings = async (req, res) => {
   try {
-    const { nama_rapat, tanggal, creatorId } = req.body;
+    const { nama_rapat, tanggal } = req.body;
+    const creatorId = req.user.id
 
-    if (!nama_rapat || !creatorId) {
-      return res.status(400).json({
-        message: "nama_rapat dan creatorId wajib diisi"
-      });
+    if (!nama_rapat) {
+    return res.status(400).json({
+        message: "nama_rapat wajib diisi"
+    });
     }
+
 
     const meeting = await Meetings.create({
       nama_rapat,

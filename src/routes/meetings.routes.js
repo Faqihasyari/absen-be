@@ -6,7 +6,7 @@ const { isAdmin } = require("../middlewares/isAdmin");
 const { validateBody } = require("../middlewares/validateBody");
 
 // ngebuat meeting hanya bisa admin
-router.post("/", auth, isAdmin, validateBody(["nama_rapat", "creatorId"]) ,meetingsController.createrMeetings)
+router.post("/", auth, isAdmin, validateBody(["nama_rapat"]) ,meetingsController.createrMeetings)
 
 // get untuk menampilkan history rapat
 router.get("/", meetingsController.getMeetings)
