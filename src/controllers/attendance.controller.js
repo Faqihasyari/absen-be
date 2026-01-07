@@ -91,3 +91,46 @@ exports.scanAttendance = async (req, res) => {
         });
     }
 };
+
+exports.getAttendanceByMeetingName = async (req, res) => {
+  try {
+    const { nama_rapat } = req.query
+
+    if (!nama_rapat) {
+      return res.status(400).json({
+        message: "nama_rapat wajib diisi"
+      })
+    }
+
+    const meeting = await Meetings.findOne({
+      where: {
+        nama_rapat
+      }
+    })
+
+    if (!meeting) {
+      return res.status(404).json({
+        message: "Rapat tidak ditemukan"
+      })
+    }
+
+    const attendances = await Attendance.findAll({
+      where: {
+        meeting_id: meeting.id
+      },
+      include: [
+        {
+          model: User,
+          attributes: ["nama", "nim"]
+        }
+      ]
+    })
+
+    res.json({
+      message: "Rekap absensi berhasil diambil",
+      data: attendances
+    })
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+};

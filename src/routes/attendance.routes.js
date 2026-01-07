@@ -5,5 +5,7 @@ const { validateBody } = require("../middlewares/validateBody");
 
 // router scan
 router.post("/scan", validateBody(["qr_token", "meeting_id"]) ,attendanceController.scanAttendance);
+router.get('/search', attendanceController.getAttendanceByMeetingName)
+
 
 module.exports = router;
