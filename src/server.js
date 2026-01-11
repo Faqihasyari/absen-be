@@ -1,3 +1,4 @@
+// src/server.js
 require("dotenv").config();
 const sequelize = require("./config/database");
 const app = require("../api/app");
@@ -6,20 +7,17 @@ const PORT = process.env.PORT || 3000;
 
 require("./models");
 
-const startServer = async () => {
-    try {
-        await sequelize.authenticate();
-        console.log("Database berhasil tehubung");
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("DB connected");
 
-        await sequelize.sync();
-        console.log("Table synced");
+    await sequelize.sync();
 
-        app.listen(PORT, () => {
-            console.log(`Server berjalan di port ${PORT}`);
-        });
-    } catch (error){
-        console.error("Gagal terhubung ke database", error);
-    }
-};
-
-startServer();
+    app.listen(PORT, () => {
+      console.log(`Server running on ${PORT}`);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+})();
