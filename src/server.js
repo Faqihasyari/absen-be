@@ -12,7 +12,9 @@ require("./models");
     await sequelize.authenticate();
     console.log("DB connected");
 
-    await sequelize.sync();
+    await sequelize.sync({ alter: true })
+  .then(() => console.log('Database synced'))
+
 
     app.listen(PORT, () => {
       console.log(`Server running on ${PORT}`);
